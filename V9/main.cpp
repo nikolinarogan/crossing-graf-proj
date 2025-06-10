@@ -594,7 +594,7 @@ int main(void)
             //dodala sam skaliranje i za kocke kada skaliram pjesacki
             glm::mat4 personModel = glm::translate(glm::mat4(1.0f), 
                 glm::vec3(peoplePositions[i][0], peoplePositions[i][1], peoplePositions[i][2]));
-            personModel = glm::scale(personModel, glm::vec3(crossingScale, 1.0f, crossingScale));
+            //personModel = glm::scale(personModel, glm::vec3(crossingScale, 1.0f, 1.0f)); //IZBACILA SKALIRANJE KOCKI, PRILIKOM SKALIRANJA PJESACKOG, NIJE PISALO U SPEC
 
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(personModel));
             
