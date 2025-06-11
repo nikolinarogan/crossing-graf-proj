@@ -1,5 +1,5 @@
 // Autor: Nikolina Rogan
-// Opis: Pedestrian Crossing 
+// Opis: Pedestrian Crossing
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -27,7 +27,7 @@ void limitFPS();
 // Pauziranje
 bool paused = false;
 float lastTime = glfwGetTime();
-float crosswalkHalfWidth = 3.5f; // Half width of the crossing
+float crosswalkHalfWidth = 3.5f; 
 bool spacePressed = false; 
 
 // Crossing scaling variable
@@ -93,227 +93,227 @@ int main(void)
 
     float planeVertices[] = {
         // Position (X, Y, Z)     // Color (R, G, B, A)
-        -4.0f, 0.0f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,  //BIJELA RAVAN
-         4.0f, 0.0f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
-         4.0f, 0.0f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
+        -4.0f, -0.01f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,  //BIJELA RAVAN
+        -4.0f, -0.01f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
+         4.0f, -0.01f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
         
-        -4.0f, 0.0f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
-         4.0f, 0.0f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
-        -4.0f, 0.0f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
+        -4.0f, -0.01f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
+         4.0f, -0.01f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
+         4.0f, -0.01f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
     };
     
     float crossingVertices[] = {
-        // Stripe 1 - Black
+        // Stripe 1 - Black (CCW winding)
         -3.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -3.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        
-        -3.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -3.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 2 - Light Grey
-        -3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -2.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -3.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -3.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 2 - Light Grey (CCW winding)
         -3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -3.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 3 - Black
-        -2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -2.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 3 - Black (CCW winding)
         -2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -2.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 4 - Light Grey
-        -2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -2.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -2.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 4 - Light Grey (CCW winding)
         -2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -2.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 5 - Black
-        -2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -1.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 5 - Black (CCW winding)
         -2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -2.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 6 - Light Grey
-        -1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -1.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -1.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 6 - Light Grey (CCW winding)
         -1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -1.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 7 - Black
-        -1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -0.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -1.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 7 - Black (CCW winding)
         -1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-        -0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -1.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 8 - Light Grey
-        -0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -0.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -0.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 8 - Light Grey (CCW winding)
         -0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-        -0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -0.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 9 - Black
-        -0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         0.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         0.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+        -0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -0.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 9 - Black (CCW winding)
         -0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         0.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -0.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 10 - Light Grey
-         0.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         0.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        -0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 10 - Light Grey (CCW winding)
          0.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          0.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 11 - Black
-         0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         0.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         0.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 11 - Black (CCW winding)
          0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          0.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 12 - Light Grey
-         0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         1.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 12 - Light Grey (CCW winding)
          0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          0.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 13 - Black
-         1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         1.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         1.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 13 - Black (CCW winding)
          1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          1.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 14 - Light Grey
-         1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         2.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         1.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 14 - Light Grey (CCW winding)
          1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          1.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 15 - Black
-         2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         2.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 15 - Black (CCW winding)
          2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          2.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 16 - Light Grey
-         2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         2.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         2.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 16 - Light Grey (CCW winding)
          2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          2.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 17 - Black
-         2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         3.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
+        // Stripe 17 - Black (CCW winding)
          2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
-         3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          2.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 18 - Light Grey
-         3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         3.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         3.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
+         3.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
+        // Stripe 18 - Light Grey (CCW winding)
          3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
-         3.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          3.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         3.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+        
+         3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         3.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
+         3.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
     };
 
     float cubeVertices[] = {
-        // Front face
+        // Front face (facing +Z) - CW winding
         -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,  // Orange
-         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-        -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Back face
-        -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        // Back face (facing -Z) - CW winding
          0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Left face
-        -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-        -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        // Left face (facing -X) - CW winding
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-        
-        // Right face
-         0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-        
-        // Top face
-        -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-        -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Bottom face
-        -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        // Right face (facing +X) - CW winding
+         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
-         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        
+        // Top face (facing +Y) - CW winding
+        -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        
+        // Bottom face (facing -Y) - CW winding
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+        -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
+         0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
     };
 
     unsigned int stride = (3 + 4) * sizeof(float);
@@ -419,7 +419,7 @@ int main(void)
     glClearColor(0.2, 0.3, 0.3, 1.0); // Pozadina boja
     glEnable(GL_DEPTH_TEST); // Enable depth testing
     glCullFace(GL_BACK);//Biranje lica koje ce se eliminisati (tek nakon sto ukljucimo Face Culling)
-
+    //glCullFace(GL_FRONT); //Desava se suprotno od back face culling provjeriti da li mi radi
     while (!glfwWindowShouldClose(window))
     {
         float currentTime = glfwGetTime();
@@ -466,11 +466,6 @@ int main(void)
         {
             float speedChange = 0.09f * deltaTime;//deltatime - vrijeme proteklo od prethodnog frejma koristim da bi mi se smoothly mijenjala brzina i da ne zavisim od FPS 
             for (int i = 0; i < 6; i++) {
-                //if (peopleSpeeds[i] > 0) { //Kocka ide udesno, pozitivna brzina - onda se smanjuje, koristim max da se ne bi smanjila ispod min dozvoljene brzine sto sam stavila da je ovo 0.0005
-                //    peopleSpeeds[i] = std::max(0.0005f, peopleSpeeds[i] - speedChange);//kocke koje idu udesno stavila sam im poz brzinu, njima oduzimam prilikom usporavanja min brzina je 0.005
-                //} else {
-                //    peopleSpeeds[i] = std::min(-0.0005f, peopleSpeeds[i] + speedChange);//kocke koje idu ulijevo imaju neg brzinu njima dodajem da bi se i njihova brzina priblizavala 0, ovo min koristim da ne predje donju granicu -0.0005
-                //}
                 peopleSpeeds[i] = std::max(0.0005f, peopleSpeeds[i] - speedChange);
             }
         }
@@ -479,11 +474,6 @@ int main(void)
             // Povecavam brzinu 
             float speedChange = 0.09f * deltaTime; ////deltatime - vrijeme proteklo od prethodnog frejma koristim da bi mi se smoothly mijenjala brzina i da ne zavisim od FPS
             for (int i = 0; i < 6; i++) {
-                //if (peopleSpeeds[i] > 0) {//ako mi je brz poz onda se krece udesno znaci da bi se povecala dodajem
-                //    peopleSpeeds[i] = std::min(0.08f, peopleSpeeds[i] + speedChange);
-                //} else {
-                //    peopleSpeeds[i] = std::max(-0.08f, peopleSpeeds[i] - speedChange);//ako mi je  brz neg onda se krece udesno da ubrzam jos vise cu oduzeti
-                //}
                 peopleSpeeds[i] = std::min(0.08f, peopleSpeeds[i] + speedChange);
             }
         }
@@ -566,32 +556,11 @@ int main(void)
             if (peoplePositions[i][0] >= crosswalkHalfWidth) {
                 peoplePositions[i][0] = crosswalkHalfWidth; // Stop
                 peopleDirections[i] = -1.0f;  // promijeni smjer
-               // peopleSpeeds[i] = -abs(peopleSpeeds[i]); // negativna brzina jer sam zakommplikovala gore pa sam nastavila
             } else if (peoplePositions[i][0] <= -crosswalkHalfWidth) {
                 peoplePositions[i][0] = -crosswalkHalfWidth; // Stop 
                 peopleDirections[i] = 1.0f;    // promijeni smjer
-               // peopleSpeeds[i] = abs(peopleSpeeds[i]); // poz brzina
             }
             
-            // Additional safety check: ensure cubes are always within boundaries
-            // This handles any edge cases from scaling or other operations
-            //if (peoplePositions[i][0] > crosswalkHalfWidth) {
-            //    peoplePositions[i][0] = crosswalkHalfWidth;
-            //    // Also reverse direction if moving outward
-            //    //if (peopleSpeeds[i] > 0) {
-            //        peopleDirections[i] = -1.0f;
-            //       // peopleSpeeds[i] = -abs(peopleSpeeds[i]);
-            //    //}
-            //} else if (peoplePositions[i][0] < -crosswalkHalfWidth) {
-            //    peoplePositions[i][0] = -crosswalkHalfWidth;
-            //    // Also reverse direction if moving outward
-            //   // if (peopleSpeeds[i] < 0) {
-            //        peopleDirections[i] = 1.0f;
-            //        //peopleSpeeds[i] = abs(peopleSpeeds[i]);
-            //    //}
-            //}
-            
-            //dodala sam skaliranje i za kocke kada skaliram pjesacki
             glm::mat4 personModel = glm::translate(glm::mat4(1.0f), 
                 glm::vec3(peoplePositions[i][0], peoplePositions[i][1], peoplePositions[i][2]));
             //personModel = glm::scale(personModel, glm::vec3(crossingScale, 1.0f, 1.0f)); //IZBACILA SKALIRANJE KOCKI, PRILIKOM SKALIRANJA PJESACKOG, NIJE PISALO U SPEC
@@ -602,8 +571,6 @@ int main(void)
             glDrawArrays(GL_TRIANGLES, 0, 36); 
         }
         
-        // Reset model matrix for next frame
-        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         renderName("Nikolina Rogan RA 137-2021", -1.0, 0.9f, 0.5f, colorShader, 0.2 * 0.3f, 0.02f, 1.0f, 1.0f, 1.0f);
         glUseProgram(unifiedShader);
         glfwSwapBuffers(window);
