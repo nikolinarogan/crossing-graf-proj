@@ -27,20 +27,20 @@ void limitFPS();
 // Pauziranje
 bool paused = false;
 float lastTime = glfwGetTime();
-float crosswalkHalfWidth = 3.5f; 
+float crosswalkHalfWidth = 3.5f; //koristim za ono kretanje naprijed nazad, da kocke ne izlaze iz ekrana
 bool spacePressed = false; 
 
-// Crossing scaling variable
-float crossingScale = 1.0f; // Current scale of the crossing
-float minScale = 0.5f; // Minimum scale
-float maxScale = 1.11f; // Maximum scale to fit within plane
-float scaleSpeed = 0.5f; // Speed of scaling
+// Skaliranje pjesackog
+float crossingScale = 1.0f; // difoltna vrijednost scale
+float minScale = 0.5f; // min ograanicenje
+float maxScale = 1.11f; // max ogranicenje da mi ne izlazi van granica bijele ravni posto je receno da se nalazi na njoj
+float scaleSpeed = 0.5f; // brzina skaliranja da vizuelno ok izgleda
 
 // Zoom variable koje mi trebaju kod perspektivne proj sa opcijom zumiranja 
 float fov = 45.0f; // Field of view 
-float minFov = 10.0f; // Minimum FOV (zoomed in)
-float maxFov = 90.0f; // Maximum FOV (zoomed out)
-float zoomSpeed = 30.0f; // Speed of zoom
+float minFov = 10.0f; // min FOV (zoom in)
+float maxFov = 90.0f; // max FOV (zoom out)
+float zoomSpeed = 30.0f; // brzina zooma da normlano vizuelno izgleda
 int main(void)
 {
 
@@ -59,14 +59,14 @@ int main(void)
     unsigned int wHeight;
     const char wTitle[] = "Pedestrian Crossing";
     
-    // Get the primary monitor
+    // primary monitor za fs
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     
-    //fullscreen window
+    //fullscreen
     window = glfwCreateWindow(mode->width, mode->height, wTitle, monitor, NULL);
     
-    //window dimensions 
+    //dimenzije prozora 
     wWidth = mode->width;
     wHeight = mode->height;
 
@@ -92,7 +92,7 @@ int main(void)
     unsigned int colorShader = createShader("textureColor.vert", "textureColor.frag"); // ovo mi je za slova
 
     float planeVertices[] = {
-        // Position (X, Y, Z)     // Color (R, G, B, A)
+        // pozicija (X, Y, Z)     // boja (R, G, B, A)
         -4.0f, -0.01f, -2.0f,      1.0f, 1.0f, 1.0f, 1.0f,  //BIJELA RAVAN
         -4.0f, -0.01f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
          4.0f, -0.01f,  2.0f,      1.0f, 1.0f, 1.0f, 1.0f,
@@ -103,7 +103,6 @@ int main(void)
     };
     
     float crossingVertices[] = {
-        // Stripe 1 - Black (CCW winding)
         -3.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -3.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -112,7 +111,6 @@ int main(void)
         -3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -3.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 2 - Light Grey (CCW winding)
         -3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -3.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -121,7 +119,6 @@ int main(void)
         -2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -2.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 3 - Black (CCW winding)
         -2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -2.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -130,7 +127,6 @@ int main(void)
         -2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -2.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 4 - Light Grey (CCW winding)
         -2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -2.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -139,7 +135,6 @@ int main(void)
         -2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -2.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 5 - Black (CCW winding)
         -2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -2.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -148,7 +143,6 @@ int main(void)
         -1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -1.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 6 - Light Grey (CCW winding)
         -1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -1.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -157,7 +151,6 @@ int main(void)
         -1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -1.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 7 - Black (CCW winding)
         -1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -1.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -166,7 +159,6 @@ int main(void)
         -0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -0.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 8 - Light Grey (CCW winding)
         -0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -0.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -175,7 +167,6 @@ int main(void)
         -0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         -0.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 9 - Black (CCW winding)
         -0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         -0.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          0.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -184,7 +175,6 @@ int main(void)
          0.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          0.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 10 - Light Grey (CCW winding)
          0.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          0.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -193,7 +183,6 @@ int main(void)
          0.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          0.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 11 - Black (CCW winding)
          0.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          0.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -202,7 +191,6 @@ int main(void)
          0.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          0.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 12 - Light Grey (CCW winding)
          0.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          0.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -211,7 +199,6 @@ int main(void)
          1.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          1.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 13 - Black (CCW winding)
          1.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          1.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -220,7 +207,6 @@ int main(void)
          1.6f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          1.6f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 14 - Light Grey (CCW winding)
          1.6f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          1.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -229,7 +215,6 @@ int main(void)
          2.0f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          2.0f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 15 - Black (CCW winding)
          2.0f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          2.0f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -238,7 +223,6 @@ int main(void)
          2.4f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          2.4f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 16 - Light Grey (CCW winding)
          2.4f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          2.4f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -247,7 +231,6 @@ int main(void)
          2.8f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          2.8f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
         
-        // Stripe 17 - Black (CCW winding)
          2.8f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          2.8f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
@@ -256,7 +239,6 @@ int main(void)
          3.2f, 0.01f,  1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
          3.2f, 0.01f, -1.6f,     0.0f, 0.0f, 0.0f, 1.0f,
         
-        // Stripe 18 - Light Grey (CCW winding)
          3.2f, 0.01f, -1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          3.2f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
          3.6f, 0.01f,  1.6f,     0.7f, 0.7f, 0.7f, 1.0f,
@@ -267,15 +249,15 @@ int main(void)
     };
 
     float cubeVertices[] = {
-        // Front face (facing +Z) - CW winding
-        -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,  // Orange
+        // Front face  CW 
+        -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,  // narandzasta boja
          0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Back face (facing -Z) - CW winding
+        // Back face 
          0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
@@ -283,7 +265,7 @@ int main(void)
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Left face (facing -X) - CW winding
+        // Left face 
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
@@ -291,7 +273,7 @@ int main(void)
         -0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Right face (facing +X) - CW winding
+        // Right face 
          0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
@@ -299,7 +281,7 @@ int main(void)
          0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Top face (facing +Y) - CW winding
+        // Top face 
         -0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         -0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
@@ -307,7 +289,7 @@ int main(void)
          0.15f,  0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f,  0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
         
-        // Bottom face (facing -Y) - CW winding
+        // Bottom face 
         -0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f, -0.15f,  0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
          0.15f, -0.15f, -0.15f,  1.0f, 0.5f, 0.0f, 1.0f,
@@ -384,10 +366,10 @@ int main(void)
     };
 
     
-    float peopleSpeeds[6] = {0.04f, 0.045f, 0.035f, 0.038f, 0.032f, 0.041f}; // POCETNE RANDOM BRZINE DODALA SAM RAZLICITE ZA SVE KOCKE - stavljene u niz, u zavisnosti od kretanja ulijevo/udesno +- == zakomplikovala bez razlogaaa
-    float peopleDirections[6] = {1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f}; // 1 = DESNO, -1 = LIJEVO - stavljene u niz  
+    float peopleSpeeds[6] = {0.04f, 0.045f, 0.035f, 0.038f, 0.032f, 0.041f}; // POCETNE RANDOM BRZINE DODALA SAM RAZLICITE ZA SVE KOCKE - stavljene u niz
+    float peopleDirections[6] = {1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f}; // 1 = DESNO, -1 = LIJEVO - stavljene u niz, ovo kpristim da se kocke krecu naprijed-nazad po pjesackom
 
-    //Cuvam originalne brzina zbog opcije pauziranja kretanja, znaci kopiram brzine iz jednog niza u drugi da bih ih zapamtila
+    //Cuvam originalne brzine zbog opcije pauziranja kretanja, znaci kopiram brzine iz jednog niza u drugi da bih ih zapamtila
     float originalSpeeds[6];
     for (int i = 0; i < 6; i++) {
         originalSpeeds[i] = peopleSpeeds[i];
@@ -417,9 +399,9 @@ int main(void)
     //glBindVertexArray(planeVAO);
 
     glClearColor(0.2, 0.3, 0.3, 1.0); // Pozadina boja
-    glEnable(GL_DEPTH_TEST); // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
     glCullFace(GL_BACK);//Biranje lica koje ce se eliminisati (tek nakon sto ukljucimo Face Culling)
-    //glCullFace(GL_FRONT); //Desava se suprotno od back face culling provjeriti da li mi radi
+    //glCullFace(GL_FRONT); //Desava se suprotno od back face culling 
     while (!glfwWindowShouldClose(window))
     {
         float currentTime = glfwGetTime();
@@ -466,7 +448,7 @@ int main(void)
         {
             float speedChange = 0.09f * deltaTime;//deltatime - vrijeme proteklo od prethodnog frejma koristim da bi mi se smoothly mijenjala brzina i da ne zavisim od FPS 
             for (int i = 0; i < 6; i++) {
-                peopleSpeeds[i] = std::max(0.0005f, peopleSpeeds[i] - speedChange);
+                peopleSpeeds[i] = std::max(0.0005f, peopleSpeeds[i] - speedChange);//stavila ogranicenje da ne moze ispod ovog
             }
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -501,25 +483,25 @@ int main(void)
             spacePressed = false;
         }
         
-        // Skaliranje pjesaxkog +
+        // Skaliranje pjesackog +
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            // Dodala sam ogranicenje da ne izadje iz dimenzija ravni na kojoj stoji provjericu jos
-            crossingScale = std::min(maxScale, crossingScale + scaleSpeed * deltaTime); //min koristim da ne predje previse
-            crosswalkHalfWidth = 3.5f * crossingScale; // azuriram ztalno ivice jer sam skalirala
+            // Dodala sam ogranicenje da ne izadje iz dimenzija ravni na kojoj stoji 
+            crossingScale = std::min(maxScale, crossingScale + scaleSpeed * deltaTime); //min koristim da ne predje previse, ovako racunam ovo scale jer inace bude prenaglo
+            crosswalkHalfWidth = 3.5f * crossingScale; // azuriram ztalno jer sam skalirala da bi se i kocke kretale do tu a ne po staroj dimenziji
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
             // smanjujem --
             crossingScale = std::max(minScale, crossingScale - scaleSpeed * deltaTime);
-            crosswalkHalfWidth = 3.5f * crossingScale; // azuriram ztalno ivice jer sam skalirala
+            crosswalkHalfWidth = 3.5f * crossingScale; // azuriram stalno jer sam skalirala da kocke znaju dokle da idu
         }
         
         // Zoom za perspektivnu projekciju
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         {
             // Zoom in smanjuje FOV
-            fov = std::max(minFov, fov - zoomSpeed * deltaTime);
+            fov = std::max(minFov, fov - zoomSpeed * deltaTime); //da ne bude prenaglo
             projectionP = glm::perspective(glm::radians(fov), (float)wWidth / (float)wHeight, 0.1f, 100.0f);
             glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionP));
         }
@@ -534,14 +516,14 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Osvjezavamo i Z bafer i bafer boje
         
         
-        // Crtanje ravni bez skaliranja - pitati da li treba da se i ona skalira
+        // Crtanje ravni 
         glm::mat4 planeModel = glm::mat4(1.0f); 
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(planeModel));
         glBindVertexArray(planeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6); 
 
         
-        // Crtanje prelaza sa skaliranjem, ne skaliram y mozda da dodam provjericu
+        // Crtanje prelaza sa skaliranjem po x osi
         glm::mat4 crossingModel = glm::scale(glm::mat4(1.0f), glm::vec3(crossingScale, 1.0f, 1.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(crossingModel));
         glBindVertexArray(crossingVAO);
